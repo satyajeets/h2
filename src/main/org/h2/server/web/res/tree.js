@@ -21,7 +21,14 @@ function addTable(name, columns, i) {
     tablesByName[name] = t;
 }
 
-function ins(s, isTable) {
+function ins(s, isTable, divNo) {
+
+    if ( divNo !== undefined ) {
+        var pairs = extractColumns(divNo);
+        if ( parent.h2query && parent.h2query.appendInsertData )
+            parent.h2query.appendInsertData(pairs, s);
+    }    
+
     if (parent.h2query) {
         if (parent.h2query.insertText) {
             parent.h2query.insertText(s, isTable);
@@ -97,7 +104,14 @@ function writeTree() {
         if (node.link==null) {
             document.write(node.text);
         } else {
-            document.write("<a id='"+node.text+"' href=\""+node.link+"\" >"+node.text+"</a>");
+            if ( node.level == 0 ) {
+                var str = node.link
+                str = str.substr(0, str.length-1);
+                node.link = str + "," + i + ")";
+                document.write("<a id='"+node.text+"' href=\""+node.link+"\" >"+node.text+"</a>");
+            }
+            else
+                document.write("<a id='"+node.text+"' href=\""+node.link+"\" >"+node.text+"</a>");
         }
         document.write("<br />");
     }
@@ -121,4 +135,24 @@ function hitOpen(i) {
     var theJoin    = document.getElementById("join"+i);
     theJoin.src = icons[0].src;
     theDiv.style.display = '';
+}
+
+/**
+ * Extracts the col names and values and appends it to a dom element
+ * used only for the insert tab
+ * @return {[type]} [description]
+ */
+function extractColumns(divNo) {
+    var arr = [], pairs = [];
+    var text = $("#div" + divNo).text();
+    text = text.substr(1,text.length);
+    arr = text.split(String.fromCharCode(160));
+
+    for ( var i = 0 ; i < arr.length; i += 2 ) {
+        pairs.push({
+            "name": arr[i],
+            "datatype": arr[i+1]
+        });
+    }
+    return pairs;
 }

@@ -11,7 +11,6 @@ Initial Developer: H2 Group
         <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css" />
         <script type="text/javascript">
-//<!--
 
 var agent=navigator.userAgent.toLowerCase();
 var is_opera = agent.indexOf("opera") >= 0;
@@ -469,6 +468,30 @@ function submitAll() {
     document.h2querysubmit.submit();
 }
 
+/**
+ * constructs the insert query and submits it
+ * @return {[type]} [description]
+ */
+function submitInsertQuery() {
+    var inputArr = $("#insert-view input");
+    var tabName = $("#insert-data-div").attr("data-tabname");
+    var colNames = $(".colname");
+    var colValues = $("#insert-view input");
+    var nameString = valString = '';
+    for ( var i = 0 ; i < colNames.length ; i++ ) {        
+        if ( i == colNames.length - 1 ) {
+            nameString += $(colNames[i]).text();
+            valString += $(colValues[i]).val();
+        } else {
+            nameString += $(colNames[i]).text() + ' , ';
+            valString += $(colValues[i]).val() + ' , ';
+        }
+    }
+    var query = "INSERT INTO " + tabName + ' ( ' + nameString + ' ) VALUES ( ' + valString + ' ) ';
+    document.h2querysubmit.sql.value = query;
+    document.h2querysubmit.submit();
+}
+
 function submitSelected() {
     var field = document.h2query.sql;
     //alert('contents ' + field.selectionStart + '  ' + field.selectionEnd);
@@ -482,12 +505,38 @@ function submitSelected() {
     document.h2querysubmit.submit();
 }
 
+function appendInsertData(pairs, tabName) {
+    var $insertDataDiv = $("#insert-data-div");
+    $insertDataDiv.attr("data-tabname", tabName);
+    $insertDataDiv.empty();
+    for ( var i = 0 ; i < pairs.length ; i++ ) {
+        $insertDataDiv.append("<div class='data-div' data-colname='"+pairs[i].name+"' data-datatype='"+pairs[i].datatype+"'></div>");
+    }
+}
+
 function displayInsertUI() {	
-	sql.focus();
+    $insertDataDiv = $("#insert-data-div");
+    $insertView = $("#insert-view");
+    $insertView.empty();
+    $table = $("<table><tr><th>Column</th><th>Type</th><th>Value</th></tr>");
+
+    var children = $insertDataDiv.children();
+    for ( var i = 0 ; i < children.length ; i++ ) {
+        $ele = $(children[i]);
+        $row = $("<tr>\
+                      <td class='colname'>"+$ele.attr('data-colname')+"</td>\
+                      <td class='coldatatype'>"+$ele.attr('data-datatype')+"</td>\
+                      <td><input type='text'></td>\
+                  </tr>");
+        $table.append($row);
+    }
+    $insertView.append($table);
+    $button = $("<button onclick='return submitInsertQuery()'>Insert</button>");
+    $insertView.append($button);
+    $("#sql").hide();        
 	return true;
 }
 
-//-->
 </script>
 </head>
     <body onresize="sizeTextArea();" onload="sizeTextArea();" style="margin: 0px; padding: 0px;">
@@ -505,6 +554,8 @@ function displayInsertUI() {
             </div>
             <textarea id="sql" name="sql" cols="80" rows="5" onkeydown="return keyDown(event)" onkeyup="return keyUp(event)"
                 onfocus="keyUp()" onchange="return keyUp()">${query}</textarea>
+            <div id='insert-view'></div>
+            <div id="insert-data-div"></div>
         </form>
         <form name="h2querysubmit" method="post" action="query.do?jsessionid=${sessionId}" target="h2result" style="display:none">
             <textarea id="sql" name="sql" style="display:none"></textarea>

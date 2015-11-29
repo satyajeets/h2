@@ -239,6 +239,8 @@ public class WebApp {
                 file = autoCompleteList();
             } else if ("tools.do".equals(file)) {
                 file = tools();
+            } else if ("getColumns.do".equals(file)) {
+                
             } else {
                 file = "error.jsp";
             }

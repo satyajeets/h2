@@ -1,13 +1,6 @@
-.checkstyle
+.DS_Store
+ext
+temp
+bin
 .classpath
 .project
-.settings
-benchmark.html
-bin
-data
-docs
-ext
-error.*
-temp
-test.out.txt
-.DS_Store

@@ -377,3 +377,7 @@ td.index {
     background-image: url(images/div-d.png);
     background-size: 1024px 512px;
 }
+
+#insert-view {
+    height: 150px;
+}
