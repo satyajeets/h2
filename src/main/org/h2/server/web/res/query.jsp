@@ -33,7 +33,7 @@ function refreshTables() {
 }
 
 function sizeTextArea() {
-	$("#sql").append("<p>asdasdasd</p>");
+    $("#sql").append("<p>asdasdasd</p>");
     var height=document.body.clientHeight;
     var sql = document.h2query.sql;
     sql.style.height=(height-sql.offsetTop)+'px';
@@ -514,7 +514,7 @@ function appendInsertData(pairs, tabName) {
     }
 }
 
-function displayInsertUI() {	
+function displayInsertUI() {    
     $insertDataDiv = $("#insert-data-div");
     $insertView = $("#insert-view");
     $insertView.empty();
@@ -534,7 +534,7 @@ function displayInsertUI() {
     $button = $("<button onclick='return submitInsertQuery()'>Insert</button>");
     $insertView.append($button);
     $("#sql").hide();        
-	return true;
+    return true;
 }
 
 </script>
@@ -542,7 +542,7 @@ function displayInsertUI() {
     <body onresize="sizeTextArea();" onload="sizeTextArea();" style="margin: 0px; padding: 0px;">
         <form name="h2query" action="javascript:alert('should not be submitting this form');">
             <span style="white-space:nowrap">
-            	<input type="button" class="button" value="insert" onclick="displayInsertUI()" />
+                <input type="button" class="button" value="insert" onclick="displayInsertUI()" />
                 <input type="button" class="button" value="${text.toolbar.run}" onclick="javascript:submitAll();sql.focus();return true;" />
                 <input type="button" class="button" value="${text.toolbar.runSelected}" onclick="javascript:submitSelected();sql.focus();return true;" />
                 <input type="button" class="button" value="${text.toolbar.autoComplete}" onclick="javascript:manualAutoComplete();sql.focus();return true;" />

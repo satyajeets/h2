@@ -378,6 +378,14 @@ td.index {
     background-size: 1024px 512px;
 }
 
+/*new feature styling*/
+
 #insert-view {
+    margin-top: 10px;
     height: 150px;
 }
+
+#insert-view button {
+    margin-top:10px;
+}
+
